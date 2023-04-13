@@ -45,6 +45,12 @@ def client(file, ip):
             print("Error: MD5 mismatch")
             exit(0)
         
+        # Check if the file lengths are the same
+        file_length = message_contents[2].split()[1]
+        if (int(file_length) != len(file_contents)):
+            print("Error: file length mismatch")
+            exit(0)
+        
         # Create the file
         with open(filename, 'w') as f:
             f.write(file_contents)
