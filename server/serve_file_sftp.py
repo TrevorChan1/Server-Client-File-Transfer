@@ -35,6 +35,8 @@ def server(ip):
     # While the process is running, receive requests
     while True:
         message, ret_address = server_socket.recvfrom(1024)
+        print(ret_address)
+        print("Request from " + str(ret_address) + ": " +message.decode('utf-8'))
         message_status = status.BADREQUEST
         return_message = ""
 
@@ -43,12 +45,14 @@ def server(ip):
         if (filename == None):
             return_message = "BADREQUEST\r\n"
             server_socket.sendto(bytes(return_message,'utf-8'), ret_address)
+            print("Response to " + str(ret_address) + ": " + return_message)
             continue
 
         # Check if the file exists in the server
         if (not os.path.exists(filename)):
             return_message = "NOTFOUND " + filename + "\r\n"
             server_socket.sendto(bytes(return_message,'utf-8'), ret_address)
+            print("Response to " + str(ret_address) + ": " + return_message)
             continue
 
         # Check if the file length is too long
@@ -57,6 +61,7 @@ def server(ip):
         if (file_size > max_length):
             return_message = "TOOLARGE " + filename + "\r\n"
             server_socket.sendto(bytes(return_message,'utf-8'), ret_address)
+            print("Response to " + str(ret_address) + ": " + return_message)
             continue
 
         # Read the file contents, get the file md5sum, and send the FOUND message is correct
@@ -75,15 +80,21 @@ def server(ip):
                 if (len(return_message) > max_length):
                     return_message = "TOOLARGE " + filename + "\r\n"
                     server_socket.sendto(bytes(return_message,'utf-8'), ret_address)
+                    print("Response to " + str(ret_address) + ": " + return_message)
                     continue
 
                 # If everything works as intended, send the FOUND message
                 server_socket.sendto(bytes(return_message,'utf-8'), ret_address)
+                print("Response to " + str(ret_address) + ":\n" + 
+                    "FOUND " + filename + "\r\n" + 
+                    "MD5 " + md5 + "\r\n" +  
+                    "LENGTH " + str(file_size) + "\r\n")
 
             # If the above fails for any reason, send back a BADREQUEST message 
             except:
                 return_message = "BADREQUEST\r\n"
                 server_socket.sendto(bytes(return_message,'utf-8'), ret_address)
+                print("Response to " + str(ret_address) + ": " + return_message)
                 continue
 
 
