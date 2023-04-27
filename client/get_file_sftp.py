@@ -41,7 +41,7 @@ def client(file, ip):
         # Check if the MD5sum is mismatched
         md5 = message_contents[1].split()[1]
         file_contents = message_contents[3]
-        if (md5 != hashlib.md5(file_contents.encode()).hexdigest()):
+        if (md5 != "0x" + str(hashlib.md5(file_contents.encode()).hexdigest())):
             print("Error: MD5 mismatch")
             exit(0)
         
