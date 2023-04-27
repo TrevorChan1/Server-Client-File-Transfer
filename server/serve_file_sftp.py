@@ -72,7 +72,7 @@ def server(ip):
                 file_contents = fd.read()
                 md5 = hashlib.md5(file_contents).hexdigest()
                 return_message = ("FOUND " + filename + "\r\n" + 
-                                  "MD5 " + md5 + "\r\n" +  
+                                  "MD5 0x" + md5 + "\r\n" +  
                                   "LENGTH " + str(file_size) + "\r\n" +  
                                   file_contents.decode('utf-8'))
                 
